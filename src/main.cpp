@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 
 #include <Shader.h>
+#include <ShaderProgram.h>
+#include <unistd.h>
 
 #define RESX 800
 #define RESY 800
@@ -64,6 +66,10 @@ public:
 
         // create shaders
         Shader* basicVert = new Shader("shaders/basic.vert");
+        Shader* basicFrag = new Shader("shaders/basic.frag");
+
+        // create shader program
+        ShaderProgram* basicProgram = new ShaderProgram(basicVert, basicFrag, nullptr, nullptr, "basicProgram");
 
         while (!glfwWindowShouldClose(window)) {
             // input

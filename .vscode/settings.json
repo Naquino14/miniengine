@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.pio": "pio",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iostream": "cpp"
     }
 }
