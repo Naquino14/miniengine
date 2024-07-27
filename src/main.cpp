@@ -1,6 +1,9 @@
 #include <iostream>
+#include <string>
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
+
+#include <Shader.h>
 
 #define RESX 800
 #define RESY 800
@@ -59,6 +62,9 @@ public:
         // copy vertex buffer data to memory
         glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
+        // create shaders
+        Shader* basicVert = new Shader("shaders/basic.vert");
+
         while (!glfwWindowShouldClose(window)) {
             // input
             process_input(window);
@@ -70,6 +76,8 @@ public:
             glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(window);
         }
+
+        delete basicVert;
 
         glfwTerminate();
 
