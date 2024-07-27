@@ -2,8 +2,8 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#define RESX 1920
-#define RESY 1080
+#define RESX 800
+#define RESY 800
 
 using namespace std;
 
@@ -13,11 +13,16 @@ static float verts[] = {
     0.0f, 0.5f
 };
 
+// gotta be seprate from the class or compiler gets angry :(
+void on_window_resize(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
 class Program {
 public: 
     GLFWwindow* window;
 
-    int Main(int argc, char** argv) {
+    int main(int argc, char** argv) {
         printf("Starting engine\n");
 
         if (!glfwInit()) 
@@ -41,6 +46,9 @@ public:
             return -1;
         }
 
+        // register window resize callback
+        glfwSetFramebufferSizeCallback(window, on_window_resize);
+
         glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
 
         // create vertex buffer object
@@ -52,10 +60,14 @@ public:
         glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
         while (!glfwWindowShouldClose(window)) {
+            // input
+            process_input(window);
+
+            // render
+
+            // swap buffers
             glfwPollEvents();
-
             glClear(GL_COLOR_BUFFER_BIT);
-
             glfwSwapBuffers(window);
         }
 
@@ -63,8 +75,15 @@ public:
 
         return 0;
     }
+
+    // temporary method, im still learning
+    void process_input(GLFWwindow* window) {
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window, true);
+        }
+    }
 };
 
 int main(int argc, char** argv) {
-    return (new Program())->Main(argc, argv);
+    return (new Program())->main(argc, argv);
 }
