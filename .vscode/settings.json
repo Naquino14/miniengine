@@ -2,6 +2,7 @@
     "files.associations": {
         "*.pio": "pio",
         "ostream": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "vector": "cpp"
     }
 }

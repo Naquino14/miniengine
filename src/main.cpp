@@ -13,9 +13,9 @@
 using namespace std;
 
 static float verts[] = {
-    -0.5f, -0.5f,
-    0.5f, -0.5f,
-    0.0f, 0.5f
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.0f, 0.5f, 0.0f
 };
 
 // gotta be seprate from the class or compiler gets angry :(
@@ -56,14 +56,6 @@ public:
 
         glClearColor(0.25f, 0.5f, 0.75f, 1.0f);
 
-        // create vertex buffer object
-        GLuint vertexBuffer;
-        glGenBuffers(1, &vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-
-        // copy vertex buffer data to memory
-        glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-
         // create shaders
         Shader* basicVert = new Shader("shaders/basic.vert");
         Shader* basicFrag = new Shader("shaders/basic.frag");
@@ -71,15 +63,39 @@ public:
         // create shader program
         ShaderProgram* basicProgram = new ShaderProgram(basicVert, basicFrag, nullptr, nullptr, "basicProgram");
 
+        // create vertex array
+        unsigned int vertexArray;
+        glGenVertexArrays(1, &vertexArray);
+        
+        // create vertex buffer
+        unsigned int vertexBuffer;
+        glGenBuffers(1, &vertexBuffer);
+
+        // bind vao, bind and copy vertex data, then configure vertex attributes
+        glBindVertexArray(vertexArray);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        // enable vertex attributes
+        glEnableVertexAttribArray(0);
+
+        // unbind buffer, then unbind vao
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
         while (!glfwWindowShouldClose(window)) {
             // input
             process_input(window);
 
             // render
+            glClear(GL_COLOR_BUFFER_BIT);
+            glUseProgram(basicProgram->GetShaderProgram());
+            glBindVertexArray(vertexArray);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
 
             // swap buffers
             glfwPollEvents();
-            glClear(GL_COLOR_BUFFER_BIT);
             glfwSwapBuffers(window);
         }
 

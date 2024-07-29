@@ -13,6 +13,7 @@ add_executable( miniengine
     src/glad.c
     src/Shader.cpp
     src/ShaderProgram.cpp
+    src/Object.cpp
 )
 
 add_custom_command(TARGET miniengine PRE_BUILD
