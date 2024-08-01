@@ -1,15 +1,13 @@
-#include <glad/glad.h>
-#include <buffer_objects/IBufferObject.h>
 #include <vector>
+
+#include <buffer_objects/IBufferObject.h>
 
 #pragma once
 
 using namespace std;
 
+/// @brief Element Buffer Object (EBO) class. Contains ordered indices for vertices.
 class ElementBufferObject : public IBufferObject {
-private:
-    unsigned int ID;
-
 public:
     /// @brief Creates an EBO with the given indices
     /// @param indices The indices array to copy into the EBO
