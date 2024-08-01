@@ -2,10 +2,14 @@
 #include <string>
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
+#include <unistd.h>
+#include <vector>
 
 #include <Shader.h>
 #include <ShaderProgram.h>
-#include <unistd.h>
+#include <buffer_objects/VertexBufferObject.h>
+#include <buffer_objects/VertexArrayObject.h>
+#include <buffer_objects/ElementBufferObject.h>
 
 #define RESX 800
 #define RESY 800
@@ -16,6 +20,10 @@ static float verts[] = {
     -0.5f, -0.5f, 0.0f,
     0.5f, -0.5f, 0.0f,
     0.0f, 0.5f, 0.0f
+};
+
+static float elems[] = {
+    0, 1, 2
 };
 
 // gotta be seprate from the class or compiler gets angry :(
@@ -64,25 +72,27 @@ public:
         ShaderProgram* basicProgram = new ShaderProgram(basicVert, basicFrag, nullptr, nullptr, "basicProgram");
 
         // create vertex array
-        unsigned int vertexArray;
-        glGenVertexArrays(1, &vertexArray);
+        VertexArrayObject vao;
+        vao.Bind();
         
         // create vertex buffer
-        unsigned int vertexBuffer;
-        glGenBuffers(1, &vertexBuffer);
+        vector<Vertex> vertices;
+        for (int i = 0; i < 9; i += 3) 
+            vertices.push_back(Vertex{{verts[i], verts[i + 1], verts[i + 2]}});
+        VertexBufferObject vbo(vertices);
 
-        // bind vao, bind and copy vertex data, then configure vertex attributes
-        glBindVertexArray(vertexArray);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        // create element buffer
+        vector<unsigned int> elements;
+        for (int i = 0; i < sizeof(elems) / sizeof(unsigned int); i++) 
+            elements.push_back(elems[i]);
+        ElementBufferObject ebo(elements);
 
-        // enable vertex attributes
-        glEnableVertexAttribArray(0);
-
-        // unbind buffer, then unbind vao
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        // link attributes
+        // vertex layout at position 0
+        vao.LinkAttribute(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), nullptr);
+        vao.Unbind();
+        vbo.Unbind();
+        ebo.Unbind();
 
         while (!glfwWindowShouldClose(window)) {
             // input
@@ -91,8 +101,9 @@ public:
             // render
             glClear(GL_COLOR_BUFFER_BIT);
             glUseProgram(basicProgram->GetShaderProgram());
-            glBindVertexArray(vertexArray);
+            vao.Bind();
             glDrawArrays(GL_TRIANGLES, 0, 3);
+            vao.Unbind();
 
             // swap buffers
             glfwPollEvents();
