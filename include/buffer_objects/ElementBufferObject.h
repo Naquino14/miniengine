@@ -1,10 +1,6 @@
-#include <vector>
-
 #include <buffer_objects/IBufferObject.h>
 
 #pragma once
-
-using namespace std;
 
 /// @brief Element Buffer Object (EBO) class. Contains ordered indices for vertices.
 class ElementBufferObject : public IBufferObject {

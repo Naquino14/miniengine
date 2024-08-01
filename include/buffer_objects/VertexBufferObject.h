@@ -1,12 +1,6 @@
-#include <glm/glm.hpp>
-#include <vector>
-
 #include <buffer_objects/IBufferObject.h>
 
 #pragma once
-
-using namespace glm;
-using namespace std;
 
 /// @brief Vertex structure, contains position, normal, and texture coordinates.
 struct Vertex {

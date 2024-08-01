@@ -1,6 +1,12 @@
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <vector>
+
+using namespace std;
+using namespace glm;
 
 #pragma once
+
 
 class IBufferObject {
 public:
