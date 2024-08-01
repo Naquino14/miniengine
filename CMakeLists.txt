@@ -8,12 +8,15 @@ find_package(OpenGL REQUIRED)
 
 include_directories(include)
 
+file(GLOB sources 
+    src/*.cpp
+    src/*.c
+    src/buffer_objects/*.cpp
+    src/buffer_objects/*.c
+)
+
 add_executable( miniengine 
-    src/main.cpp 
-    src/glad.c
-    src/Shader.cpp
-    src/ShaderProgram.cpp
-    src/Object.cpp
+    ${sources}
 )
 
 add_custom_command(TARGET miniengine PRE_BUILD
