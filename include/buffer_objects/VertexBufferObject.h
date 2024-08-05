@@ -10,7 +10,7 @@ struct Vertex {
     vec2 texCoords;
 };
 
-class VertexBufferObject : public IBufferObject {
+class VertexBufferObject : public BufferObject {
 public:
     /// @brief Creates a VBO with the given vertices
     /// @param vertices The vertices array to copy into the VBO

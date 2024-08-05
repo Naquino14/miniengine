@@ -2,3 +2,4 @@ build/
 src/glad.c
 include/glad
 include/KHR
+assets/

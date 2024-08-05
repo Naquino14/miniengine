@@ -7,9 +7,7 @@
 
 #include <Shader.h>
 #include <ShaderProgram.h>
-#include <buffer_objects/VertexBufferObject.h>
-#include <buffer_objects/VertexArrayObject.h>
-#include <buffer_objects/ElementBufferObject.h>
+#include <Object.h>
 
 #define RESX 800
 #define RESY 800
@@ -71,28 +69,21 @@ public:
         // create shader program
         ShaderProgram* basicProgram = new ShaderProgram(basicVert, basicFrag, nullptr, nullptr, "basicProgram");
 
-        // create vertex array
-        VertexArrayObject vao;
-        vao.Bind();
-        
         // create vertex buffer
         vector<Vertex> vertices;
         for (int i = 0; i < 9; i += 3) 
             vertices.push_back(Vertex{{verts[i], verts[i + 1], verts[i + 2]}});
-        VertexBufferObject vbo(vertices);
 
         // create element buffer
         vector<unsigned int> elements;
         for (int i = 0; i < sizeof(elems) / sizeof(unsigned int); i++) 
             elements.push_back(elems[i]);
-        ElementBufferObject ebo(elements);
 
-        // link attributes
-        // vertex layout at position 0
-        vao.LinkAttribute(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), nullptr);
-        vao.Unbind();
-        vbo.Unbind();
-        ebo.Unbind();
+        // create mesh
+        Mesh* mesh = new Mesh(vertices, elements, vector<Texture>());
+
+        // create object
+        Object* obj = new Object(basicProgram, mesh);
 
         while (!glfwWindowShouldClose(window)) {
             // input
@@ -100,10 +91,7 @@ public:
 
             // render
             glClear(GL_COLOR_BUFFER_BIT);
-            glUseProgram(basicProgram->GetShaderProgram());
-            vao.Bind();
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-            vao.Unbind();
+            obj->Draw();
 
             // swap buffers
             glfwPollEvents();

@@ -2,6 +2,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <ShaderProgram.h>
+#include <Mesh.h>
 
 #pragma once
 
@@ -18,12 +19,8 @@ private:
     /// @brief The object's material's shader program
     ShaderProgram* shaderProgram;
 
-    // mesh data
-
-    /// @brief The object's mesh array (vertex data)
-    vector<float> mesh;
-    /// @brief The object's color array (vertex color data)
-    vector<float> color;
+    /// @brief The object's mesh 
+    Mesh* mesh;
     
     // transform data
 
@@ -38,19 +35,17 @@ public:
     /// @brief Constructs an Object with a name, shader program, mesh, and vertex color array
     /// @param objectName the object's name
     /// @param shaderProgram the object's shader program
-    /// @param mesh the object's mesh array
-    /// @param color the object's color array
-    Object(ShaderProgram* shaderProgram, vector<float> mesh, vector<float> color);
+    /// @param mesh the object's mesh
+    Object(ShaderProgram* shaderProgram, Mesh* mesh);
 
     /// @brief Full constructor for the Object class
     /// @param objectName the object's name
     /// @param shaderProgram the object's shader program
-    /// @param mesh the object's mesh array
-    /// @param color the object's color array
+    /// @param mesh the object's mesh
     /// @param position the object's position in the world  
     /// @param rotation the object's rotation in the world
     /// @param scale the object's scale
-    Object(ShaderProgram* shaderProgram, vector<float> mesh, vector<float> color, vec3 position, vec3 rotation, vec3 scale);
+    Object(ShaderProgram* shaderProgram, Mesh* mesh, vec3 position, vec3 rotation, vec3 scale);
 
     /// @brief Clone constructor for the Object class
     /// @param object the object to clone
@@ -71,13 +66,9 @@ public:
     /// @return the object's name
     string GetObjectName();
 
-    /// @brief Get the object's mesh array
-    /// @return the object's mesh array
-    vector<float> GetMesh();
-
-    /// @brief Get the object's color array
-    /// @return the object's color array
-    vector<float> GetColor();
+    /// @brief Get the object's mesh
+    /// @return the object's mesh
+    Mesh* GetMesh();
 
     /// @brief Get the object's position
     /// @return the object's position
@@ -102,4 +93,7 @@ public:
     /// @brief Set the object's scale
     /// @param scale the object's new scale
     void SetScale(vec3 scale);    
+
+    /// @brief Draw the object
+    void Draw();
 };

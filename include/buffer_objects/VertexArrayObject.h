@@ -3,7 +3,7 @@
 
 #pragma once
 
-class VertexArrayObject : public IBufferObject {
+class VertexArrayObject : public BufferObject {
 public:
     /// @brief Creates a Vertex Array Object (VAO)
     VertexArrayObject();

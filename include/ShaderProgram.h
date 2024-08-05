@@ -75,4 +75,7 @@ public:
     /// @brief Set the program name
     /// @param programName the program name
     void SetProgramName(string programName);
+
+    /// @brief Activate the shader program
+    void Activate();
 };

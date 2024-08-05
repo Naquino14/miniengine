@@ -105,3 +105,7 @@ string ShaderProgram::GetProgramName() {
 void ShaderProgram::SetProgramName(string programName) {
     this->programName = programName;
 }
+
+void ShaderProgram::Activate() {
+    glUseProgram(shaderProgram);
+}

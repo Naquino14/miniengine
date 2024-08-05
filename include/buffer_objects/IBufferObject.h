@@ -8,7 +8,7 @@ using namespace glm;
 #pragma once
 
 
-class IBufferObject {
+class BufferObject {
 public:
     unsigned int ID; 
     virtual void Bind() = 0;

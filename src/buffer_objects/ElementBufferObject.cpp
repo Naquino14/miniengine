@@ -14,6 +14,10 @@ void ElementBufferObject::Unbind() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void ElementBufferObject::Delete() {
-    glDeleteBuffers(1, &ID);
+void ElementBufferObject::Delete() { 
+    glDeleteBuffers(1, &ID); 
 }
+
+unsigned int ElementBufferObject::GetElementCount() { 
+    return elementCount;
+ }

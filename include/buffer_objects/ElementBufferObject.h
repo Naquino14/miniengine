@@ -3,7 +3,10 @@
 #pragma once
 
 /// @brief Element Buffer Object (EBO) class. Contains ordered indices for vertices.
-class ElementBufferObject : public IBufferObject {
+class ElementBufferObject : public BufferObject {
+private: 
+    unsigned int elementCount;
+
 public:
     /// @brief Creates an EBO with the given indices
     /// @param indices The indices array to copy into the EBO
@@ -17,4 +20,8 @@ public:
 
     /// @brief Deletes the EBO
     void Delete() override;
+
+    /// @brief Returns the number of elements in the EBO
+    /// @return The number of elements in the EBO
+    unsigned int GetElementCount();
 };
