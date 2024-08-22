@@ -15,12 +15,13 @@
 using namespace std;
 
 static float verts[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f, 0.5f, 0.0f
+    // position, normal, color, texture coord
+    -0.5f, -0.5f, 0.0f,    0.0f, 0.0f, 0.0f,    1.0f, 0.0f, 0.0f,    0.0f, 0.0f,
+    0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 0.0f,    0.0f, 1.0f, 0.0f,    0.0f, 0.0f,
+    0.0f, 0.5f, 0.0f,      0.0f, 0.0f, 0.0f,    0.0f, 0.0f, 1.0f,    0.0f, 0.0f
 };
 
-static float elems[] = {
+static unsigned int elems[] = {
     0, 1, 2
 };
 
@@ -71,8 +72,15 @@ public:
 
         // create vertex buffer
         vector<Vertex> vertices;
-        for (int i = 0; i < 9; i += 3) 
-            vertices.push_back(Vertex{{verts[i], verts[i + 1], verts[i + 2]}});
+        for (int i = 0; i < (sizeof(verts) / sizeof(Vertex)) * 11; i += 11) {
+            Vertex vertex;
+            vertex.position = vec3(verts[i], verts[i + 1], verts[i + 2]);
+            vertex.normal = vec3(verts[i + 3], verts[i + 4], verts[i + 5]);
+            vertex.color = vec3(verts[i + 6], verts[i + 7], verts[i + 8]);
+            vertex.texCoords = vec2(verts[i + 9], verts[i + 10]);
+
+            vertices.push_back(vertex);
+        }
 
         // create element buffer
         vector<unsigned int> elements;

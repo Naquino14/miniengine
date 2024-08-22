@@ -13,7 +13,8 @@ Mesh::Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture
 
     vertexArrayObject->LinkAttribute(vertexBufferObject, 0, 3, GL_FLOAT, sizeof(Vertex), nullptr);
     vertexArrayObject->LinkAttribute(vertexBufferObject, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-    vertexArrayObject->LinkAttribute(vertexBufferObject, 2, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
+    vertexArrayObject->LinkAttribute(vertexBufferObject, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    vertexArrayObject->LinkAttribute(vertexBufferObject, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
     vertexArrayObject->Unbind();
     vertexBufferObject.Unbind();
@@ -26,5 +27,5 @@ Mesh::~Mesh() {
 }
 
 void Mesh::Draw() {
-    glDrawArrays(GL_TRIANGLES, 0, elementBufferObject->GetElementCount());
+    glDrawElements(GL_TRIANGLES, elementBufferObject->GetElementCount(), GL_UNSIGNED_INT, nullptr);
 }
