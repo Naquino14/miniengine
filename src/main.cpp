@@ -21,9 +21,45 @@ static float verts[] = {
     0.0f, 0.5f, 0.0f,      0.0f, 0.0f, 0.0f,    0.0f, 0.0f, 1.0f,    0.0f, 0.0f
 };
 
+static float verts2[] = {
+     0.5,  0.5, 0.0,    0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 0.0f,    1.0f,  1.0f,
+    -0.5,  0.5, 0.0,    0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f,    1.0f, -1.0f,
+     0.5, -0.5, 0.0,    0.0f, 0.0f, 0.0f,   1.0f, 0.0f, 0.0f,   -1.0f,  1.0f,
+    -0.5, -0.5, 0.0,    0.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f,   -1.0f, -1.0f,
+};
+
 static unsigned int elems[] = {
     0, 1, 2
 };
+
+static unsigned int elems2[] = {
+    1, 0, 2, 
+    1, 2, 3
+};
+
+vector<Vertex> createVertexBuffer(unsigned long len, const float* pVerts) {
+    vector<Vertex> vertices;
+    const unsigned long limit = (len / sizeof(Vertex)) * 11;
+    for (unsigned long i = 0; i < limit; i += 11) {
+        Vertex vertex;
+        vertex.position = vec3(pVerts[i], pVerts[i + 1], pVerts[i + 2]);
+        vertex.normal = vec3(pVerts[i + 3], pVerts[i + 4], pVerts[i + 5]);
+        vertex.color = vec3(pVerts[i + 6], pVerts[i + 7], pVerts[i + 8]);
+        vertex.texCoords = vec2(pVerts[i + 9], pVerts[i + 10]);
+
+        vertices.push_back(vertex);
+    }
+    return vertices;
+}
+
+vector<unsigned int> createElementBuffer(unsigned long len, unsigned int* pElems) {
+    vector<unsigned int> elements;
+    const unsigned long int limit = len / sizeof(unsigned int);
+    for (unsigned long i = 0; i < limit; i++)
+        elements.push_back(pElems[i]);
+
+    return elements;
+}
 
 // gotta be seprate from the class or compiler gets angry :(
 void on_window_resize(GLFWwindow* window, int width, int height) {
@@ -71,27 +107,24 @@ public:
         ShaderProgram* basicProgram = new ShaderProgram(basicVert, basicFrag, nullptr, nullptr, "basicProgram");
 
         // create vertex buffer
-        vector<Vertex> vertices;
-        for (int i = 0; i < (sizeof(verts) / sizeof(Vertex)) * 11; i += 11) {
-            Vertex vertex;
-            vertex.position = vec3(verts[i], verts[i + 1], verts[i + 2]);
-            vertex.normal = vec3(verts[i + 3], verts[i + 4], verts[i + 5]);
-            vertex.color = vec3(verts[i + 6], verts[i + 7], verts[i + 8]);
-            vertex.texCoords = vec2(verts[i + 9], verts[i + 10]);
+        vector<Vertex> vertices = createVertexBuffer(sizeof(verts), verts);
 
-            vertices.push_back(vertex);
-        }
+        vector<Vertex> vertices2 = createVertexBuffer(sizeof(verts2), verts2);
 
         // create element buffer
-        vector<unsigned int> elements;
-        for (int i = 0; i < sizeof(elems) / sizeof(unsigned int); i++) 
-            elements.push_back(elems[i]);
+        vector<unsigned int> elements = createElementBuffer(sizeof(elems), elems);
+
+        vector<unsigned int> elements2 = createElementBuffer(sizeof(elems2), elems2);
 
         // create mesh
         Mesh* mesh = new Mesh(vertices, elements, vector<Texture>());
 
+        Mesh* mesh2 = new Mesh(vertices2, elements2, vector<Texture>()); 
+
         // create object
         Object* obj = new Object(basicProgram, mesh);
+
+        Object* obj2 = new Object(basicProgram, mesh2);
 
         while (!glfwWindowShouldClose(window)) {
             // input
@@ -99,7 +132,8 @@ public:
 
             // render
             glClear(GL_COLOR_BUFFER_BIT);
-            obj->Draw();
+            // obj->Draw();
+            obj2->Draw();
 
             // swap buffers
             glfwPollEvents();
